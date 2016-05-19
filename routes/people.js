@@ -44,9 +44,29 @@ router.get('/new/', function(req, res) {
 
 
 /* POST registra uma nova pessoa */
-// IMPLEMENTAR AQUI
+router.post('/', function(req, res) {
+  db.query('INSERT INTO person VALUES (NULL, ' + db.escape(req.body.name) + ', 1, NULL)',
+    function(err, result) {
+      if (err) {
+        req.flash('error', 'Erro ao inserir pessoa');
+      } else {
+        req.flash('success', 'Pessoa registrada com sucesso.');
+      }
+      res.redirect('/');
+  });
+});
 
 /* DELETE uma pessoa */
-// IMPLEMENTAR AQUI
+router.delete('/:person_id', function(req, res) {
+  db.query('DELETE FROM person WHERE id = ' + req.params.person_id,
+    function(err, result) {
+      if (result.affectedRows !== 1) {
+        req.flash('error', 'Erro ao excluir pessoa.');
+      } else {
+        req.flash('success', 'A pessoa foi excluída do sistema.');
+      }
+      res.redirect('/people/');
+  });
+});
 
 module.exports = router;
